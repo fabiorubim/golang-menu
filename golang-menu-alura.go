@@ -1,25 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
-	nome := "Fabio Rubim"
-	versao := 1.1
-	fmt.Println("Olá, Sr. ", nome)
-	fmt.Println("Este programa está na versão", versao)
-
-	fmt.Println("1- Inciar monitoramento")
-	fmt.Println("2- Exibir os Logs")
-	fmt.Println("0- Sair do programa")
-
-	//Função que captura o que usuário digitar
-	var comando int
-	//fmt.Scanf("%d", &comando) //Não é utilizado inferência, você informa com o %d o tipo que será guardado no ponteiro &comando, neste caso um int
-	//Scanf("%d", &comando) não precisaria saber o tipo, já que a variável comando já foi declarada como int
-	//Como já se sabe o tipo utilize somente o scan(&comando). Não precisa colocar o %d
-	fmt.Scan(&comando) //Se colocar algo que não seá um INT, nada será "pego", logo o valor de comando será 0.
-	fmt.Println("O ponteiro da minha variável comando é", &comando)
-	fmt.Println("O comando escolhido foi", comando)
+	exibeIntroducao()
+	exibeMenu()
 
 	//Go não utiliza os parenteses no IF
 	// if comando == 1 {
@@ -44,6 +32,7 @@ func main() {
 	// }
 
 	//Mais sucinto que utilizar IF
+	comando := leComando()
 	switch comando {
 	case 1:
 		fmt.Println("Monitorando...")
@@ -52,12 +41,14 @@ func main() {
 		fmt.Println("Exibindo logs...")
 	case 0:
 		fmt.Println("Saindo do programa")
+		os.Exit(0)
 	// case 4: // Várias linhas dentro do case
 	// 	fmt.Println("Exemplo 4")
 	// 	fmt.Println("Outra linha")
 	// 	fmt.Println("Última linha")
 	default:
 		fmt.Println("Não conheço este comando!")
+		os.Exit(-1)
 	}
 
 	//É case sensitive. Precisa tratar como lowercase ou uppercase
@@ -81,4 +72,30 @@ func main() {
 
 	// }
 
+}
+
+func exibeIntroducao() {
+	nome := "Fabio Rubim"
+	versao := 1.1
+	fmt.Println("Olá, Sr. ", nome)
+	fmt.Println("Este programa está na versão", versao)
+}
+
+func exibeMenu() {
+	fmt.Println("1- Inciar monitoramento")
+	fmt.Println("2- Exibir os Logs")
+	fmt.Println("0- Sair do programa")
+}
+
+func leComando() int {
+	//Função que captura o que usuário digitar
+	var comandoLido int
+	//fmt.Scanf("%d", &comandoLido) //Não é utilizado inferência, você informa com o %d o tipo que será guardado no ponteiro &comandoLido, neste caso um int
+	//Scanf("%d", &comandoLido) não precisaria saber o tipo, já que a variável comando já foi declarada como int
+	//Como já se sabe o tipo utilize somente o scan(&comandoLido). Não precisa colocar o %d
+	fmt.Scan(&comandoLido) //Se colocar algo que não seá um INT, nada será "pego", logo o valor de comando será 0.
+	fmt.Println("O ponteiro da minha variável comando é", &comandoLido)
+	fmt.Println("O comando escolhido foi", comandoLido)
+
+	return comandoLido
 }
