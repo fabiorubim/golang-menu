@@ -2,53 +2,57 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 )
 
 func main() {
 	exibeIntroducao()
-	exibeMenu()
 
-	//Go não utiliza os parenteses no IF
-	// if comando == 1 {
-	// 	fmt.Println("Monitorando...")
-	// } else if comando == 2 {
-	// 	fmt.Println("Exibindo logs...")
-	// } else if comando == 0 {
-	// 	fmt.Println("Saindo do programa")
-	// } else {
-	// 	fmt.Println("Não conheço este comando!")
-	// }
+	for {
+		exibeMenu()
 
-	// ValorBoleano := false
-	// if ValorBoleano {
-	// 	fmt.Println("Este IF funciona!")
-	// }
+		//Go não utiliza os parenteses no IF
+		// if comando == 1 {
+		// 	fmt.Println("Monitorando...")
+		// } else if comando == 2 {
+		// 	fmt.Println("Exibindo logs...")
+		// } else if comando == 0 {
+		// 	fmt.Println("Saindo do programa")
+		// } else {
+		// 	fmt.Println("Não conheço este comando!")
+		// }
 
-	// idade := 32
-	// expressaoBoleana := idade > 18
-	// if expressaoBoleana {
-	// 	fmt.Println("É maior de idade!")
-	// }
+		// ValorBoleano := false
+		// if ValorBoleano {
+		// 	fmt.Println("Este IF funciona!")
+		// }
 
-	//Mais sucinto que utilizar IF
-	comando := leComando()
-	switch comando {
-	case 1:
-		fmt.Println("Monitorando...")
-		break //Não é obrigatório, logo o Go não vai "reclamar"
-	case 2:
-		fmt.Println("Exibindo logs...")
-	case 0:
-		fmt.Println("Saindo do programa")
-		os.Exit(0)
-	// case 4: // Várias linhas dentro do case
-	// 	fmt.Println("Exemplo 4")
-	// 	fmt.Println("Outra linha")
-	// 	fmt.Println("Última linha")
-	default:
-		fmt.Println("Não conheço este comando!")
-		os.Exit(-1)
+		// idade := 32
+		// expressaoBoleana := idade > 18
+		// if expressaoBoleana {
+		// 	fmt.Println("É maior de idade!")
+		// }
+
+		//Mais sucinto que utilizar IF
+		comando := leComando()
+		switch comando {
+		case 1:
+			iniciarMonitoramento()
+			break //Não é obrigatório, logo o Go não vai "reclamar"
+		case 2:
+			fmt.Println("Exibindo logs...")
+		case 0:
+			fmt.Println("Saindo do programa")
+			os.Exit(0)
+		// case 4: // Várias linhas dentro do case
+		// 	fmt.Println("Exemplo 4")
+		// 	fmt.Println("Outra linha")
+		// 	fmt.Println("Última linha")
+		default:
+			fmt.Println("Não conheço este comando!")
+			os.Exit(-1)
+		}
 	}
 
 	//É case sensitive. Precisa tratar como lowercase ou uppercase
@@ -98,4 +102,19 @@ func leComando() int {
 	fmt.Println("O comando escolhido foi", comandoLido)
 
 	return comandoLido
+}
+
+func iniciarMonitoramento() {
+	fmt.Println("Monitorando...")
+
+	//site := "https://www.alura.com.br"
+	site := "https://random-status-code.herokuapp.com/"
+	resp, _ := http.Get(site)
+	//fmt.Println(resp)
+
+	if resp.StatusCode == 200 {
+		fmt.Println("Site:", site, "foi carregado com sucesso!")
+	} else {
+		fmt.Println("Site:", site, "está com problemas! Status code:", resp.StatusCode)
+	}
 }
