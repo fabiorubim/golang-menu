@@ -106,7 +106,14 @@ func leComando() int {
 
 func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
-
+	var sites [4]string //Todo array no Go tem um tamanho fixo [4] por exemplo. Normalmente não se trabalha com array, e sim com slice. Slice é um abstração, funciona "em com a" de um array
+	sites[0] = "https://random-status-code.herokuapp.com/"
+	sites[1] = "https://www.alura.com.br"
+	sites[2] = "https://www.caelum.com.br"
+	//sites[3] = "https://www.google.com.br"
+	fmt.Println("Site 3", sites[3]) //Será impressa uma string vazia, já que não foi atribuído nenhum valor. Isso ocorre pois o valor padrão para o tipo string é vazio.
+	//sites[4] = "https://www.santander.com.br"
+	fmt.Println("Sites", sites)
 	//site := "https://www.alura.com.br"
 	site := "https://random-status-code.herokuapp.com/"
 	resp, _ := http.Get(site)
@@ -118,3 +125,18 @@ func iniciarMonitoramento() {
 		fmt.Println("Site:", site, "está com problemas! Status code:", resp.StatusCode)
 	}
 }
+
+/*
+func main() {
+	estados := devolveEstadosDoSudeste()
+	fmt.Println(estados)
+
+func devolveEstadosDoSudeste() [4]string {
+	var estados [4]string
+	estados[0] = "RJ"
+	estados[1] = "SP"
+	estados[2] = "MG"
+	estados[3] = "ES"
+	return estados
+}
+*/
