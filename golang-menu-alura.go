@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 )
 
 func main() {
+	//exibeNomes()
 	exibeIntroducao()
 
 	for {
@@ -106,18 +108,28 @@ func leComando() int {
 
 func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
-	var sites [4]string //Todo array no Go tem um tamanho fixo [4] por exemplo. Normalmente não se trabalha com array, e sim com slice. Slice é um abstração, funciona "em com a" de um array
-	sites[0] = "https://random-status-code.herokuapp.com/"
-	sites[1] = "https://www.alura.com.br"
-	sites[2] = "https://www.caelum.com.br"
-	//sites[3] = "https://www.google.com.br"
-	fmt.Println("Site 3", sites[3]) //Será impressa uma string vazia, já que não foi atribuído nenhum valor. Isso ocorre pois o valor padrão para o tipo string é vazio.
-	//sites[4] = "https://www.santander.com.br"
-	fmt.Println("Sites", sites)
-	//site := "https://www.alura.com.br"
-	site := "https://random-status-code.herokuapp.com/"
+	//utilizando slices
+	sites := []string{"https://random-status-code.herokuapp.com/", "https://www.alura.com.br", "https://www.caelum.com.br"}
+
+	// fmt.Println("Sites", sites)
+	// //Go só possui FOR como estrutura de repetição
+	// for i := 0; i < len(sites); i++ {
+	// 	fmt.Println("Site ", sites[i])
+	// }
+
+	for i := 0; i < 5; i++ {
+		//Esse tipo de FOR retorna dois valores, um indice e o próprio elementos
+		for indice, site := range sites {
+			fmt.Println("Na posicao ", indice, "do slice tem o site ", site)
+			testaSite(site)
+		}
+		time.Sleep(5 * time.Second)//5 segundos
+	}
+
+}
+
+func testaSite(site string) {
 	resp, _ := http.Get(site)
-	//fmt.Println(resp)
 
 	if resp.StatusCode == 200 {
 		fmt.Println("Site:", site, "foi carregado com sucesso!")
@@ -125,6 +137,48 @@ func iniciarMonitoramento() {
 		fmt.Println("Site:", site, "está com problemas! Status code:", resp.StatusCode)
 	}
 }
+
+//Utilizando arrays
+// func iniciarMonitoramento() {
+// 	fmt.Println("Monitorando...")
+// 	var sites [4]string //Todo array no Go tem um tamanho fixo [4] por exemplo. Normalmente não se trabalha com array, e sim com slice. Slice é um abstração, funciona "em com a" de um array
+// 	sites[0] = "https://random-status-code.herokuapp.com/"
+// 	sites[1] = "https://www.alura.com.br"
+// 	sites[2] = "https://www.caelum.com.br"
+// 	//sites[3] = "https://www.google.com.br"
+// 	fmt.Println("Site 3", sites[3]) //Será impressa uma string vazia, já que não foi atribuído nenhum valor. Isso ocorre pois o valor padrão para o tipo string é vazio.
+// 	fmt.Println("Sites TypeOf", reflect.TypeOf(sites))
+// 	//sites[4] = "https://www.santander.com.br"
+// 	fmt.Println("Sites", sites)
+// 	//site := "https://www.alura.com.br"
+// 	site := "https://random-status-code.herokuapp.com/"
+// 	resp, _ := http.Get(site)
+// 	//fmt.Println(resp)
+
+// 	if resp.StatusCode == 200 {
+// 		fmt.Println("Site:", site, "foi carregado com sucesso!")
+// 	} else {
+// 		fmt.Println("Site:", site, "está com problemas! Status code:", resp.StatusCode)
+// 	}
+// }
+
+// func exibeNomes() {
+// 	//TUdo é um aray em Go, os slices são arrays em Go. O que diferecia é que os slices abstraem algumas funcionalidade, como adcionar um novo item.
+// 	nomes := []string{"Fabio", "Marina", "Renato", "Valéria"} //Slices não necessitam declaram o tamanho, ele infere a partir da quantidade de itens passados.
+// 	fmt.Println(nomes)
+// 	fmt.Println("Nomes TypeOf", reflect.TypeOf(nomes))
+// 	fmt.Println("O meu slice tem", len(nomes), "itens")                 //Quantidade de items
+// 	fmt.Println("O meu slice tem a capacidade de", cap(nomes), "itens") //Capacidade disponível
+
+// 	//O append dobra o tamanho do slice de acordo com a quantidade de itens de acordo com o tamanho do slice anterior
+// 	//Se o tamnho dos itens adicionados superarem o dobro do tamanho, então o novo slice terá o tamanho da quantidade total de itens
+// 	nomes = append(nomes, "Tomaz", "Zure", "Euclydes", "Lito", "Cláudia", "Regina", "Rodrigo")
+
+// 	fmt.Println(nomes)
+// 	fmt.Println("Nomes TypeOf", reflect.TypeOf(nomes))
+// 	fmt.Println("O meu slice tem", len(nomes), "itens")
+// 	fmt.Println("O meu slice tem a capacidade de", cap(nomes), "itens")
+// }
 
 /*
 func main() {
