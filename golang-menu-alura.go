@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+const monitoramentos = 3
+const delay = 5
+
 func main() {
 	//exibeNomes()
 	exibeIntroducao()
@@ -117,13 +120,14 @@ func iniciarMonitoramento() {
 	// 	fmt.Println("Site ", sites[i])
 	// }
 
-	for i := 0; i < 5; i++ {
+	for i := 0; i < monitoramentos; i++ {
 		//Esse tipo de FOR retorna dois valores, um indice e o próprio elementos
 		for indice, site := range sites {
 			fmt.Println("Na posicao ", indice, "do slice tem o site ", site)
 			testaSite(site)
 		}
-		time.Sleep(5 * time.Second)//5 segundos
+		time.Sleep(delay * time.Second)//5 segundos
+		fmt.Println("")
 	}
 
 }
