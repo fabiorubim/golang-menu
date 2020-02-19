@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -112,7 +115,10 @@ func leComando() int {
 func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
 	//utilizando slices
-	sites := []string{"https://random-status-code.herokuapp.com/", "https://www.alura.com.br", "https://www.caelum.com.br"}
+
+	//A linha abaixo foi trocada para ler os sites à partir do arquivo
+	//sites := []string{"https://random-status-code.herokuapp.com/", "https://www.alura.com.br", "https://www.caelum.com.br"}
+	sites := leSitesDoArquivo()
 
 	// fmt.Println("Sites", sites)
 	// //Go só possui FOR como estrutura de repetição
@@ -126,20 +132,59 @@ func iniciarMonitoramento() {
 			fmt.Println("Na posicao ", indice, "do slice tem o site ", site)
 			testaSite(site)
 		}
-		time.Sleep(delay * time.Second)//5 segundos
+		time.Sleep(delay * time.Second) //5 segundos
 		fmt.Println("")
 	}
 
 }
 
 func testaSite(site string) {
-	resp, _ := http.Get(site)
+	resp, err := http.Get(site)
+
+	if err != nil {
+		fmt.Println("Ocorreu um erro", err)
+	}
 
 	if resp.StatusCode == 200 {
 		fmt.Println("Site:", site, "foi carregado com sucesso!")
 	} else {
 		fmt.Println("Site:", site, "está com problemas! Status code:", resp.StatusCode)
 	}
+}
+
+func leSitesDoArquivo() []string {
+	var sites []string
+	//Primeiro é necessário abrir o arquivo antes de ler, para isso peça ao SO. Existem vários jeitos de abrir um arquivo em Go.
+	//arquivo, err := os.Open("sites.txt") //Retorna um ponteiro para um arquivo - 1º jeito
+	//arquivo, err := ioutil.ReadFile("sites.txt") //Retorna um array de bytes. Lê o arquivo todo de uma vez - 2º jeito
+
+	arquivo, err := os.Open("sites.txt") //3º jeito é igual ao 2º, mas irá utilizar o bufio.NewReader()
+	if err != nil {
+		fmt.Println("Ocorreu um erro!", err)
+		//return //Serve para não continuar com a execução da função
+	}
+
+	leitor := bufio.NewReader(arquivo)
+
+	for {
+		linha, err := leitor.ReadString('\n') //Aspas simples pois é um byte, aspas duplas quando for string
+		linha = strings.TrimSpace(linha)      //Remove o \n e espaços
+		//fmt.Println(linha)
+		sites = append(sites, linha)
+
+		if err == io.EOF {
+			break //Sai do loop for. Acabou o arquivo
+		}
+
+	}
+
+	//fmt.Println("Meu arquivo", string(arquivo)) //colocando string na frenet, transformamos o array de bytes em uma string
+
+	//fmt.Println(sites)
+
+	arquivo.Close()
+	return sites
+
 }
 
 //Utilizando arrays
